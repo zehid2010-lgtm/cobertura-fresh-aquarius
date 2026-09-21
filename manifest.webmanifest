@@ -1,0 +1,18 @@
+{
+  "name": "Cobertura Fresh & Aquarius",
+  "short_name": "Fresh Aquarius",
+  "description": "Seguimiento de cobertura Cepita Fresh y Aquarius - Tucumán",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#eef7fb",
+  "theme_color": "#0b6fa4",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
