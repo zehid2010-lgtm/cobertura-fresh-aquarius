@@ -154,3 +154,40 @@ select:focus,input:focus{border-color:#58b9df;box-shadow:0 0 0 4px rgba(21,148,2
   .client-row{grid-template-columns:minmax(0,1fr)}
   .status{justify-self:start}
 }
+
+/* Banner Cepita Fresh + Aquarius */
+.brand-banner{
+  width:100%;
+  overflow:hidden;
+  border-radius:28px;
+  background:#fff;
+  border:1px solid var(--line);
+  box-shadow:0 18px 42px rgba(4,90,132,.16);
+}
+.brand-banner img{
+  display:block;
+  width:100%;
+  height:auto;
+  aspect-ratio:1724/576;
+  object-fit:cover;
+}
+.update-strip{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  align-items:center;
+  margin-top:14px;
+  padding:14px 18px;
+  border-radius:20px;
+  background:linear-gradient(135deg,#075f91 0%,#0f86b7 52%,#21b3c5 100%);
+  color:#fff;
+  box-shadow:0 12px 28px rgba(4,90,132,.16);
+}
+.update-strip .eyebrow{margin-bottom:4px}
+.update-strip > div:first-child > strong{font-size:14px}
+.update-strip .update-box{margin-left:auto}
+@media (max-width:800px){
+  .brand-banner{border-radius:20px}
+  .update-strip{align-items:flex-start;flex-direction:column}
+  .update-strip .update-box{width:100%;margin-left:0}
+}
