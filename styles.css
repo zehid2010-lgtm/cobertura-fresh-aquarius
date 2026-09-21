@@ -158,6 +158,8 @@ select:focus,input:focus{border-color:#58b9df;box-shadow:0 0 0 4px rgba(21,148,2
 /* Banner Cepita Fresh + Aquarius */
 .brand-banner{
   width:100%;
+  max-width:1100px;
+  margin:0 auto;
   overflow:hidden;
   border-radius:28px;
   background:#fff;
@@ -168,8 +170,10 @@ select:focus,input:focus{border-color:#58b9df;box-shadow:0 0 0 4px rgba(21,148,2
   display:block;
   width:100%;
   height:auto;
-  aspect-ratio:1724/576;
-  object-fit:cover;
+  max-height:none;
+  object-fit:contain;
+  object-position:center;
+  image-rendering:auto;
 }
 .update-strip{
   display:flex;
