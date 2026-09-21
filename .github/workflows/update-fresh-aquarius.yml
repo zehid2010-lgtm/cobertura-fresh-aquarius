@@ -1,0 +1,98 @@
+name: Actualizar Fresh y Aquarius
+
+on:
+  repository_dispatch:
+    types: [update_fresh_aquarius]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-fresh-aquarius
+  cancel-in-progress: false
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Actualizar fresh-aquarius.json
+        run: |
+          python - <<'PY'
+          import json
+          import os
+
+          with open(os.environ["GITHUB_EVENT_PATH"], "r", encoding="utf-8") as f:
+              event = json.load(f)
+
+          payload = event.get("client_payload", {}).get("data")
+          if payload is None:
+              raise SystemExit("No llegó client_payload.data")
+
+          if isinstance(payload, str):
+              payload = json.loads(payload)
+
+          bit = {
+              "fresh15": 1,
+              "fresh3": 2,
+              "aq15": 4,
+              "aq225": 8,
+              "aq25ret": 16,
+              "aq375": 32,
+              "aq500nr": 64,
+              "aq500ret": 128,
+          }
+
+          if "c" in payload:
+              clients = []
+              for row in payload.get("c", []):
+                  if not isinstance(row, list) or len(row) < 5:
+                      continue
+                  route, client_id, client, channel, mask = row[:5]
+                  mask = int(mask or 0)
+                  clients.append({
+                      "route": str(route),
+                      "clientId": str(client_id),
+                      "client": str(client),
+                      "channel": str(channel or ""),
+                      "p": {k: bool(mask & b) for k, b in bit.items()}
+                  })
+
+              output = {
+                  "source": "automation",
+                  "updatedAt": payload.get("u"),
+                  "territory": "Tucumán",
+                  "routes": ["40","41","42","43","44","45"],
+                  "rules": {"buyer": "1 = comprador; 0 o vacío = pendiente"},
+                  "clients": clients
+              }
+          else:
+              output = payload
+              output["source"] = "automation"
+
+          output.setdefault("routes", ["40","41","42","43","44","45"])
+          output.setdefault("territory", "Tucumán")
+          output.setdefault("clients", [])
+          output["clients"] = sorted(
+              output["clients"],
+              key=lambda x: (str(x.get("route","")), str(x.get("client","")).casefold())
+          )
+
+          with open("fresh-aquarius.json", "w", encoding="utf-8") as f:
+              json.dump(output, f, ensure_ascii=False, separators=(",", ":"))
+          PY
+
+      - name: Guardar cambios
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add fresh-aquarius.json
+          if git diff --cached --quiet; then
+            echo "Sin cambios"
+          else
+            git commit -m "Actualizar Fresh y Aquarius automáticamente"
+            git push
+          fi
