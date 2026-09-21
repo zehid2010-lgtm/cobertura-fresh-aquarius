@@ -7,6 +7,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 concurrency:
   group: update-fresh-aquarius
@@ -14,6 +16,9 @@ concurrency:
 
 jobs:
   update-data:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Descargar repositorio
@@ -96,3 +101,15 @@ jobs:
             git commit -m "Actualizar Fresh y Aquarius automáticamente"
             git push
           fi
+
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Preparar sitio
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Publicar sitio
+        id: deployment
+        uses: actions/deploy-pages@v4
