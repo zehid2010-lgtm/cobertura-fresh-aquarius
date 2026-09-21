@@ -1,5 +1,5 @@
-const CACHE = "fresh-aquarius-shell-v2";
-const SHELL = ["./","./index.html","./styles.css?v=2","./app.js?v=1","./manifest.webmanifest","./icon.svg","./banner-fresh-aquarius.webp"];
+const CACHE = "fresh-aquarius-shell-v3";
+const SHELL = ["./","./index.html","./styles.css?v=3","./app.js?v=1","./manifest.webmanifest","./icon.svg","./banner-fresh-aquarius.webp?v=3"];
 
 self.addEventListener("install", event => {
   self.skipWaiting();
